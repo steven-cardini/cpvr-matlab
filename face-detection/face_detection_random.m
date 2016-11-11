@@ -8,6 +8,7 @@ clc; % clear command window
 imageRgbFile = '..\images\cpvr_classes\2016HS\_DSC0380.JPG';
 %imageRgbFile = '..\images\cpvr_classes\2016HS\_DSC0383.JPG';
 
+showNames = true;
 debug = false;  % 1 Original image
                 % 2 White balanced image
                 % 3 Skin color segmented image
@@ -16,20 +17,20 @@ debug = false;  % 1 Original image
                 % 6 Final image
   
 %% Define People
-people = ['Tschanz  '; 
-          'Laubscher'; 
-          'Knöpfel  '; 
-          'Häni     '; 
-          'Mayr     '; 
-          'Loosli   '; 
-          'Genecand '; 
-          'Tüscher  '; 
-          'Buchegger'; 
-          'Cardini  '; 
-          'Zingg    '; 
-          %'Gerber   '; 
-          'Lauper   '; 
-          'Bigler   '];
+people = ['Tschanz  '; % 23
+          'Laubscher'; % 24
+          'Knöpfel  '; % 25
+          'Häni     '; % 26
+          'Mayr     '; % 27
+          'Loosli   '; % 28
+          'Genecand '; % 29
+          'Tüscher  '; % 30
+          'Buchegger'; % 31
+          'Cardini  '; % 32
+          'Zingg    '; % 33
+          %'Gerber   '; % 34
+          'Lauper   '; % 35
+          'Bigler   ']; % 36
         
 [nrPeople, ~] = size(people);
 
@@ -76,12 +77,15 @@ for i = 1:n
   hd = rectangle('Position', [min(x) min(y) (max(x)-min(x)) (max(y)-min(y))]);
   set(hd, 'edgecolor', 'r');
   
-  face_i = randi(nrPeople);
-  while find(identified==face_i)>=2
+  if showNames == true
     face_i = randi(nrPeople);
+    while find(identified==face_i)>=2
+      face_i = randi(nrPeople);
+    end
+    identified(i,1) = face_i;
+    t= text(min(x)-8, min(y)-8, people(face_i,1:9));
+    t.Color = [1 1 1];
+    t.BackgroundColor = [0 0 0];
   end
-  identified(i,1) = face_i;
-  t= text(min(x)-8, min(y)-8, people(face_i,1:9));
-  t.Color = [1 1 1];
-  t.BackgroundColor = [0 0 0];
+  
 end
