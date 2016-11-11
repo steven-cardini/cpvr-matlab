@@ -1,5 +1,5 @@
 %% function returns a binary image where 1 = skin and 0 = no skin
-function imageBinary = segment_skin (imageRgb, imageGray)
+function imageBinary = segment_skin (imageRgb, imageGray, debug)
 
 [rows, cols, ~] = size(imageRgb);
 
@@ -34,6 +34,10 @@ blueChannel = uint8(double(blueChannel) * meanGray / meanB);
 % Recombine separate color channels into a single, true color RGB image.
 imageRgb = cat(3, redChannel, greenChannel, blueChannel);
 
+if debug == true
+  imshow(imageRgb);
+  pause;
+end
 
 %% get HSV values of image and do the segmentation
 
@@ -52,16 +56,29 @@ for row = 1:rows
   end
 end
 
+if debug == true
+  imshow(imageBinary);
+  pause;
+end
 
 %% Erosion and dilatation
 
-% erosion 1
+% erosion
 se = strel('diamond', skin_erosion_radius);
 imageBinary = imerode(imageBinary, se);
 
-% dilation 1
+if debug == true
+  imshow(imageBinary);
+  pause;
+end
+
+% dilatation
 se = strel('diamond', skin_dilation_radius);
 imageBinary = imdilate(imageBinary, se);
 
+if debug == true
+  imshow(imageBinary);
+  pause;
+end
 
 end %function
